@@ -2,7 +2,7 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "baseUrl": "./src",
+        "baseUrl": "src",
         "outDir": "./dist/out-tsc",
         "esModuleInterop": true,
         "sourceMap": true,
@@ -13,7 +13,13 @@
         "target": "ES2022",
         "module": "ES2022",
         "useDefineForClassFields": false,
-        "lib": ["ES2022", "dom"]
+        "lib": ["ES2022", "dom"],
+        "paths": {
+            "@environments/*": ["environments/*"],
+            "@assets/*": ["assets/*"],
+            "@shared/*": ["app/shared/*"],
+            "@fuse/*": ["@fuse/*"]
+        }
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false

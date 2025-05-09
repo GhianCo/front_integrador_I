@@ -1,0 +1,8 @@
+<div class="flex items-center mr-4">
+    <ng-container>
+        <mat-icon svgIcon="{{hasError ? 'heroicons_outline:x-mark' : 'heroicons_outline:check'}}"
+                  [ngClass]="{'text-red-500': hasError, 'text-green-500': !hasError}"
+                  class="icon-size-4 mr-2"></mat-icon>
+        <span class="ml-2">{{message}}</span>
+    </ng-container>
+</div>

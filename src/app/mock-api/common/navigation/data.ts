@@ -8,7 +8,22 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/example'
-    }
+    },
+    {
+        id: 'tablas',
+        title: 'Tablas',
+        type: 'group',
+        icon: 'heroicons_outline:home',
+        children: [
+            {
+                id: 'tablas.services',
+                title: 'Servicios',
+                type: 'basic',
+                icon: 'heroicons_outline:clipboard-document-check',
+                link: '/tablas/servicios',
+            },
+        ],
+    },
 ];
 export const compactNavigation: FuseNavigationItem[] = [
     {
