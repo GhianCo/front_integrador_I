@@ -254,7 +254,7 @@ export class ServicesComponentStore extends ComponentStore<IStatesServicesState>
         filterServicesToApply.page = 1;
         this.loadSearchServices(filterServicesToApply);
         if (!searchValue.length) {
-            filterServicesToApply.query = PARAM.UNDEFINED;
+            filterServicesToApply.query = PARAM.VACIO;
         }
         return {
             ...state,
