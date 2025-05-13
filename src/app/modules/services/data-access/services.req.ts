@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { environment } from "@environments/environment";
 import { Observable } from "rxjs";
 import { ParseDataResponseMapper } from '@shared/mappers/parse.data.response.mapper';
 import { IResponse } from '@shared/interfaces/IResponse';
 import { ServicesListMapper } from './mappers/services.list.mapper';
+import {HttpService} from "@shared/services/http.service";
 
 @Injectable({
     providedIn: 'root'
@@ -16,15 +16,16 @@ export class ServicesReq {
     private parseDataResponseMapper = new ParseDataResponseMapper();
     private servicesListMapper = new ServicesListMapper();
 
-    private REMOTE_API_URI_ACTIVOS = environment.REMOTE_API_URI_ACTIVOS;
+    private REMOTE_API_URI = environment.apiRest;
 
     constructor(
-        private http: HttpClient,
+        private http: HttpService,
     ) {
     }
 
     requestSearchServicesByCriteria(criteria): Observable<IResponse> {
-        return this.http.post(this.REMOTE_API_URI_ACTIVOS + 'service/searchByParams', criteria)
+        const {query, page, perPage} = criteria;
+        return this.http.get(this.REMOTE_API_URI + 'service/getAll?query=' + query + '&page=' + page + '&perPage=' + perPage)
             .pipe(
                 map((data: any) => {
                     const response = this.parseDataResponseMapper.transform(data);
@@ -36,8 +37,8 @@ export class ServicesReq {
             );
     }
 
-    requestCreateService(stateFixedAsset): Observable<IResponse> {
-        return this.http.post(this.REMOTE_API_URI_ACTIVOS + 'service', stateFixedAsset)
+    requestCreateService(service): Observable<IResponse> {
+        return this.http.post(this.REMOTE_API_URI + 'service', service)
             .pipe(
                 map((data: any) => {
                     const response = this.parseDataResponseMapper.transform(data);
@@ -49,9 +50,9 @@ export class ServicesReq {
             );
     }
 
-    requestUpdateService(stateFixedAsset): Observable<IResponse> {
-        const { service_id } = stateFixedAsset;
-        return this.http.put(this.REMOTE_API_URI_ACTIVOS + 'service/' + service_id, stateFixedAsset)
+    requestUpdateService(service): Observable<IResponse> {
+        const { service_id } = service;
+        return this.http.put(this.REMOTE_API_URI + 'service',service_id, service)
             .pipe(
                 map((data: any) => {
                     const response = this.parseDataResponseMapper.transform(data);

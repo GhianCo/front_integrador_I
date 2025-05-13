@@ -70,6 +70,9 @@
                                                         Descripción
                                                     </th>
                                                     <th class="font-bold px-6 py-4 text-left">
+                                                        Precio
+                                                    </th>
+                                                    <th class="font-bold px-6 py-4 text-left">
                                                         Activo
                                                     </th>
                                                     <th class="font-bold px-6 py-4 text-right">
@@ -83,11 +86,14 @@
                                                     <tr class="border-b"
                                                         [ngClass]="{'bg-gray-800': vm.serviceSelected?.service_id == service.service_id}">
                                                         <td class="px-6 py-4  font-medium">
-                                                            {{ service.service_nombre }}
+                                                            {{ service.name }}
+                                                        </td>
+                                                        <td class="px-6 py-4  font-medium">
+                                                            {{ service.price }}
                                                         </td>
                                                         <td class="px-6 py-4">
-                                                            <mat-icon [svgIcon]="'heroicons_outline:check'" *ngIf="service.service_activa" class="text-green-400 icon-size-4"></mat-icon>
-                                                            <mat-icon [svgIcon]="'heroicons_outline:x-mark'" *ngIf="!service.service_activa" class="text-red-400 icon-size-4"></mat-icon>
+                                                            <mat-icon [svgIcon]="'heroicons_outline:check'" *ngIf="service.active" class="text-green-400 icon-size-4"></mat-icon>
+                                                            <mat-icon [svgIcon]="'heroicons_outline:x-mark'" *ngIf="!service.active" class="text-red-400 icon-size-4"></mat-icon>
                                                         </td>
                                                         <td class="px-6 py-4 text-right">
                                                             <a class="min-w-10 min-h-7 h-7 px-2 leading-6"
@@ -108,7 +114,7 @@
                                     class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
                                     (page)="changePagination($event)"
                                     [ngClass]="{'pointer-events-none': vm.servicesLoading}"
-                                    [length]="vm.servicesPagination?.totalRows"
+                                    [length]="vm.servicesPagination?.totalRecords"
                                     [pageIndex]="vm.servicesPagination?.currentPage - 1"
                                     [pageSize]="vm.filterServicesToApply?.perPage" [pageSizeOptions]="[10, 25, 100]"
                                     [showFirstLastButtons]="true"></mat-paginator>

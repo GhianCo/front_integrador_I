@@ -1,6 +1,6 @@
 import {MainMapper} from './main.mapper';
 import {HTTP_RESPONSE} from '@shared/constants';
-import { IResponse } from '@shared/interfaces/IResponse';
+import {IResponse} from '@shared/interfaces/IResponse';
 
 export class ParseDataResponseMapper extends MainMapper<any, IResponse> {
     protected map(responseBackend: any): IResponse {
@@ -22,17 +22,17 @@ export class ParseDataResponseMapper extends MainMapper<any, IResponse> {
                     dataObj = responseBackend;
                 } else {
                     if (!responseBackend.code && !responseBackend.message) {
-                        dataObj = {code: HTTP_RESPONSE.OK, message: '', data: responseBackend};
+                        dataObj = {code: HTTP_RESPONSE.HTTP_200_OK, message: '', data: responseBackend};
                         if (responseBackend.message && Array.isArray(responseBackend.message)) {
                             dataObj = {
-                                code: HTTP_RESPONSE.OK,
+                                code: HTTP_RESPONSE.HTTP_200_OK,
                                 message: responseBackend.message,
                                 data: responseBackend
                             };
                         }
                         if (responseBackend.message && !Array.isArray(responseBackend.message)) {
                             dataObj = {
-                                code: HTTP_RESPONSE.OK,
+                                code: HTTP_RESPONSE.HTTP_200_OK,
                                 message: responseBackend.message,
                                 data: responseBackend
                             };
@@ -41,7 +41,7 @@ export class ParseDataResponseMapper extends MainMapper<any, IResponse> {
                         if (responseBackend.code === HTTP_RESPONSE.PERMISION_ERROR) {
                             dataObj = responseBackend;
                         }
-                        if (responseBackend.code === HTTP_RESPONSE.OK) {
+                        if (responseBackend.code === HTTP_RESPONSE.HTTP_200_OK) {
                             if (responseBackend.message && Array.isArray(responseBackend.message)) {
                                 dataObj = {
                                     code: responseBackend.code,

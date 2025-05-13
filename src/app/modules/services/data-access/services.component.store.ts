@@ -30,7 +30,7 @@ const initialStatesServicesState: IStatesServicesState = {
     serviceSelected: null,
 
     filterServicesToApply: {
-        query: PARAM.UNDEFINED,
+        query: PARAM.VACIO,
         page: 1,
         perPage: 10
     },

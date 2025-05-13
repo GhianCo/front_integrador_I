@@ -1,9 +1,225 @@
-<div class="flex min-w-0 flex-auto flex-col">
-    <!-- Main -->
-    <div class="flex-auto p-6 sm:p-10">
-        <!-- CONTENT GOES HERE -->
-        <div
-            class="h-400 max-h-400 min-h-400 rounded-2xl border-2 border-dashed border-gray-300"
-        ></div>
+<div class="flex w-full flex-auto flex-col">
+    <div class="mx-auto flex w-full max-w-screen-xl flex-wrap p-6 md:p-8">
+        <!-- Title and action buttons -->
+        <div class="flex w-full items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-semibold leading-8 tracking-tight">
+                    Resumen
+                </h2>
+                <div class="text-secondary font-medium tracking-tight">
+                   Sigue el flujo de tu negocios con la siguientes metricas
+                </div>
+            </div>
+            <div class="ml-6 flex items-center">
+                <button class="hidden sm:inline-flex" mat-stroked-button>
+                    <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:document-chart-bar'"
+                    ></mat-icon>
+                    <span class="ml-2">Reportes</span>
+                </button>
+                <button class="ml-3 hidden sm:inline-flex" mat-stroked-button>
+                    <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:cog-8-tooth'"
+                    ></mat-icon>
+                    <span class="ml-2">Configuraciones</span>
+                </button>
+                <button
+                        class="ml-3 hidden sm:inline-flex"
+                        mat-flat-button
+                        [color]="'primary'"
+                >
+                    <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:arrow-up-tray'"
+                    ></mat-icon>
+                    <span class="ml-2">Exportar</span>
+                </button>
+
+                <!-- Actions menu (visible on xs) -->
+                <div class="sm:hidden">
+                    <button [matMenuTriggerFor]="actionsMenu" mat-icon-button>
+                        <mat-icon
+                                [svgIcon]="'heroicons_mini:ellipsis-vertical'"
+                        ></mat-icon>
+                    </button>
+                    <mat-menu #actionsMenu="matMenu">
+                        <button mat-menu-item>Exportar</button>
+                        <button mat-menu-item>Reportes</button>
+                        <button mat-menu-item>Configuraciones</button>
+                    </mat-menu>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 grid w-full grid-cols-1 gap-8 xl:grid-cols-2">
+            <div class="grid gap-8 sm:grid-flow-col xl:grid-flow-row">
+                <!-- Previous statement -->
+                <div
+                        class="bg-card relative flex flex-auto flex-col overflow-hidden rounded-2xl p-6 pb-3 pr-3 shadow"
+                >
+                    <div class="absolute bottom-0 right-0 -m-6 h-24 w-24">
+                        <mat-icon
+                                class="text-green-500 opacity-25 icon-size-24 dark:text-green-400"
+                                [svgIcon]="'heroicons_outline:check-circle'"
+                        ></mat-icon>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex flex-col">
+                            <div
+                                    class="truncate text-lg font-medium leading-6 tracking-tight"
+                            >
+                                Estado anterior
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="-mx-6 mt-4 flex flex-row flex-wrap">
+                        <div class="mx-6 my-3 flex flex-col">
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                                Indicador 1
+                            </div>
+                            <div class="mt-2 text-3xl font-medium leading-none">
+                                250 PEN
+                            </div>
+                        </div>
+                        <div class="mx-6 my-3 flex flex-col">
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                                Indicador 2
+                            </div>
+                            <div class="mt-2 text-3xl font-medium leading-none">
+                                367 PEN
+                            </div>
+                        </div>
+                        <div class="mx-6 my-3 flex flex-col">
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                                Indicador 3
+                            </div>
+                            <div class="mt-2 text-3xl font-medium leading-none">
+                                500 PEN
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Current statement -->
+                <div
+                        class="bg-card relative flex flex-auto flex-col overflow-hidden rounded-2xl p-6 pb-3 pr-3 shadow"
+                >
+                    <div class="absolute bottom-0 right-0 -m-6 h-24 w-24">
+                        <mat-icon
+                                class="text-red-500 opacity-25 icon-size-24 dark:text-red-400"
+                                [svgIcon]="'heroicons_outline:exclamation-circle'"
+                        ></mat-icon>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex flex-col">
+                            <div
+                                    class="truncate text-lg font-medium leading-6 tracking-tight"
+                            >
+                                Estado actual
+                            </div>
+                            <div class="text-sm font-medium text-red-600">
+                                Pagar antes del 20 de junio 2025
+                            </div>
+                        </div>
+                        <div class="-mt-2 ml-auto">
+
+                        </div>
+                    </div>
+                    <div class="-mx-6 mt-4 flex flex-row flex-wrap">
+                        <div class="mx-6 my-3 flex flex-col">
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                                Indicador 1
+                            </div>
+                            <div class="mt-2 text-3xl font-medium leading-none">
+                                223 PEN
+                            </div>
+                        </div>
+                        <div class="mx-6 my-3 flex flex-col">
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                                Indicador 2
+                            </div>
+                            <div class="mt-2 text-3xl font-medium leading-none">
+                                235 PEN
+                            </div>
+                        </div>
+                        <div class="mx-6 my-3 flex flex-col">
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                                Indicador 3
+                            </div>
+                            <div class="mt-2 text-3xl font-medium leading-none">
+                                433 PEN
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Account balance -->
+            <div
+                    class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl shadow"
+            >
+                <div class="flex flex-col p-6 pb-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <div
+                                    class="mr-4 truncate text-lg font-medium leading-6 tracking-tight"
+                            >
+                                Cuentas de balance
+                            </div>
+                            <div class="text-secondary font-medium">
+                                Indicadores de ingresos por periodos
+                            </div>
+                        </div>
+                        <div class="ml-2">
+
+
+                        </div>
+                    </div>
+                    <div class="mr-2 mt-6 flex items-start">
+                        <div class="flex flex-col">
+                            <div
+                                    class="text-3xl font-semibold tracking-tighter md:text-5xl"
+                            >
+                                23%
+                            </div>
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                               Promedio de ingresos
+                            </div>
+                        </div>
+                        <div class="ml-8 flex flex-col md:ml-16">
+                            <div
+                                    class="text-3xl font-semibold tracking-tighter md:text-5xl"
+                            >
+                              50%
+                            </div>
+                            <div
+                                    class="text-secondary text-sm font-medium leading-none"
+                            >
+                                Promedio de salidas
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-auto flex-col">
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>

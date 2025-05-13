@@ -8,7 +8,7 @@ import {
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
-import {AsyncPipe, DOCUMENT, I18nPluralPipe, NgClass, NgIf} from '@angular/common';
+import {AsyncPipe, DOCUMENT, I18nPluralPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {FormControl} from '@angular/forms';
 import {MatDrawer, MatDrawerContainer, MatDrawerContent} from '@angular/material/sidenav';
@@ -44,7 +44,8 @@ import {MatIcon} from "@angular/material/icon";
         MatInput,
         MatAnchor,
         AsyncPipe,
-        MatIcon
+        MatIcon,
+        NgForOf
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

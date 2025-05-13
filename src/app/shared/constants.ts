@@ -5,25 +5,26 @@ export const PARAM = {
     SI: '1',
     NO: '0',
     UNDEFINED: '-1',
-    VACIO: ''
+    VACIO: '',
 };
+
+export const SI = '1';
+export const NO = '0';
 
 // HTTP RESPONSE
 export const HTTP_RESPONSE = {
-    OK: '200',
-    BAD_REQUEST: '400',
+    SUCCESS: '1',
+    WARNING: '2',
+    ERROR: '3',
+    INFO: '4',
+    HTTP_200_OK: 200,
+    HTTP_CREATED: 201,
+    BAD_REQUEST: 400,
     PERMISION_ERROR: '401',
-    NOT_FOUND: '404',
     CODE_NOT_DEFINED: '601',
     MALFORMED_JSON: '701',
     ACCESS_DENIED: '403'
 };
-
-export enum PETICION {
-    SIN_INICIALIZAR = '1',
-    EN_PROCESO = '2',
-    FINALIZADA = '3'
-}
 
 export enum ACTION_CRUD {
     CREATE = '1',
@@ -37,38 +38,64 @@ export enum ORDER_ARRAY {
     DESC = 1,
 }
 
-export enum TypeFileToUpload {
-    Image = "1",
-    Video = "2"
+
+export const TIPO_PAGO_EFECTIVO = 1;
+export const TIPO_PAGO_TARJETA = 2;
+export const TIPO_PAGO_YAPE = 3;
+export const TIPO_PAGO_PLIN = 4;
+export const TIPO_PAGO_TRANSFERENCIA = 5;
+
+export const TIPOS_PAGO = [
+    { id: TIPO_PAGO_EFECTIVO, descripcion: 'Efectivo' },
+    { id: TIPO_PAGO_TARJETA, descripcion: 'Tarjeta' },
+    // { id: TIPO_PAGO_YAPE, descripcion: 'Yape' },
+    { id: TIPO_PAGO_PLIN, descripcion: 'Plin' },
+    { id: TIPO_PAGO_TRANSFERENCIA, descripcion: 'Transferencia' },
+];
+
+export const TIPO_BANCO_BCP = "1";
+export const TIPO_BANCO_CAJAPIURA = "2";
+
+export const BANCOS = [
+    { id: TIPO_BANCO_BCP, descripcion: 'BCP' },
+    { id: TIPO_BANCO_CAJAPIURA, descripcion: 'CAJA PIURA' },
+];
+
+
+export const COMPROBANTES = {
+    BOLETA: 1,
+    FACTURA: 2,
+    NOTA_DE_VENTA: 3,
 }
 
-export type SortOrderClause = 1 | -1;
+export const CONDICION_PAGO_CONTADO = 1;
+export const CONDICION_PAGO_CREDITO = 2;
 
-export enum TypeFilterApplyToList {
-    Order,
-    Search,
-}
+export const CONDICIONES_PAGO = [
+    { id: CONDICION_PAGO_CONTADO, descripcion: 'Contado' },
+    { id: CONDICION_PAGO_CREDITO, descripcion: 'Crédito' },
+];
 
-export enum ClauseOrder {
-    ASC = 1,
-    DESC = -1,
-}
 
-export enum DerivadoSituacion {
-    ARRENDADO,
-    PROPIO,
-}
+export const COMISION_POR_VENTA = "1";
+export const COMISION_POR_COBRANZA = "2";
 
-export enum DerivadoEstado {
-    NUEVO = 1,
-    USADO = 2,
-    CON_DETERIOSO = 3,
-}
+export const TIPOS_COMISIONES = [
+    { id: COMISION_POR_VENTA, descripcion: 'Comisión por venta' },
+    { id: COMISION_POR_COBRANZA, descripcion: 'Comisión por cobranza' },
+]
 
-export enum FormatFieldEspecification {
-    FIELD_TEXT = 1,
-    FIELD_NUMBER = 2,
-    FIELD_TRUE_FALSE = 3,
-    FIELD_SELECTOR_PREFIX = 4,
-    FIELD_SELECTOR_VALUES = 5,
+export const CARGO_ADMINISTRADOR = "Administrador";
+export const CARGO_OPERADOR = "Operador";
+export const CARGO_AUDITOR = "Auditor";
+
+export const CARGOS = [
+    { id: CARGO_ADMINISTRADOR, descripcion: 'Administrador' },
+    { id: CARGO_OPERADOR, descripcion: 'Operador' },
+    { id: CARGO_AUDITOR, descripcion: 'Auditor' }
+];
+
+export const ORDENCOMPRA_ESTADO = {
+    PENDIENTE: 1,
+    PROCESADO: 2
 }
