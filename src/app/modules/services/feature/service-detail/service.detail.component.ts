@@ -107,11 +107,11 @@ export class ServiceDetailComponent implements OnInit, OnDestroy {
         if (this.serviceForm.invalid) {
             return;
         }
-        const company = this.serviceForm.getRawValue();
-        if (company.service_id) {
-            this._servicesComponentStore.loadUpdateService(company);
+        const service = this.serviceForm.getRawValue();
+        if (service.service_id) {
+            this._servicesComponentStore.loadUpdateService(service);
         } else {
-            this._servicesComponentStore.loadCreateService(company);
+            this._servicesComponentStore.loadCreateService(service);
         }
     }
 

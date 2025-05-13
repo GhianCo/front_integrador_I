@@ -6,11 +6,11 @@ import {ServicesComponentStore} from "../../data-access/services.component.store
 @Injectable({ providedIn: 'root'})
 export class ServicesListResolver implements Resolve<any> {
     constructor(
-        private _areasComponentStore: ServicesComponentStore,
+        private _servicesComponentStore: ServicesComponentStore,
     ) {
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any[]> {
-        return this._areasComponentStore.loadAllServices();
+        return this._servicesComponentStore.loadAllServices();
     }
 }

@@ -6,7 +6,7 @@
     <ng-container *ngIf="!editMode">
         <div class="relative w-full h-22 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
             <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
-                <div class="text-4xl font-bold truncate">{{ vm.serviceSelected?.service_nombre }}</div>
+                <div class="text-4xl font-bold truncate">{{ vm.serviceSelected?.name }}</div>
                 <div class="flex items-center ml-auto mb-1">
                     <button mat-stroked-button (click)="toggleEditMode(true)">
                         <mat-icon [svgIcon]="'heroicons_outline:pencil'" class="icon-size-4"></mat-icon>
@@ -22,10 +22,16 @@
         <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
             <div class="w-full max-w-3xl">
                 <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
-                    <div class="flex sm:items-center" *ngIf="vm.serviceSelected?.service_nombre">
+                    <div class="flex sm:items-center" *ngIf="vm.serviceSelected?.description">
                         <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
                         <div class="ml-6 leading-6"><span class="font-bold">Descripción:</span>
-                            {{ vm.serviceSelected?.service_nombre }}
+                            {{ vm.serviceSelected?.description }}
+                        </div>
+                    </div>
+                    <div class="flex sm:items-center" *ngIf="vm.serviceSelected?.price">
+                        <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                        <div class="ml-6 leading-6"><span class="font-bold">Precio:</span>
+                            {{ vm.serviceSelected?.price }}
                         </div>
                     </div>
                 </div>
@@ -36,7 +42,7 @@
     <ng-container *ngIf="editMode">
         <div class="relative w-full h-22 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
             <div class="flex items-center justify-between w-full max-w-3xl mx-auto pt-6">
-                <div class="text-4xl font-bold truncate">{{ vm.serviceSelected?.service_nombre }}</div>
+                <div class="text-4xl font-bold truncate">{{ vm.serviceSelected?.name }}</div>
                 <button mat-icon-button [matTooltip]="'Cerrar'" [routerLink]="['../']">
                     <mat-icon [svgIcon]="'heroicons_outline:x-mark'" class="text-white"></mat-icon>
                 </button>

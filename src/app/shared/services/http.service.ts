@@ -125,7 +125,7 @@ export class HttpService {
      */
     put(endpoint: string, id: any, data: any, options?: HttpMethodOptions) {
         return this.request(this.parsePath(id, endpoint), {
-            method: HttpMethods.PUT,
+            method: HttpMethods.POST,
             body: data,
             ...options
         });

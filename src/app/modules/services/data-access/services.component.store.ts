@@ -102,16 +102,17 @@ export class ServicesComponentStore extends ComponentStore<IStatesServicesState>
         );
     });
 
-    readonly loadCreateService = this.effect((company$: Observable<any>) => {
-        return company$.pipe(
-            map(company => {
+    readonly loadCreateService = this.effect((service$: Observable<any>) => {
+        return service$.pipe(
+            map(service => {
                 this.patchState({createUpdateServiceLoading: true});
+                delete service.service_id;
                 return {
-                    ...company,
-                    service_activa: company.service_activa ? PARAM.ACTIVO : PARAM.INACTIVO
+                    ...service,
+                    active: service.active ? PARAM.ACTIVO : PARAM.INACTIVO
                 }
             }),
-            switchMap(company => this._statesFixedassetRemoteRequest.requestCreateService(company).pipe(
+            switchMap(service => this._statesFixedassetRemoteRequest.requestCreateService(service).pipe(
                 tap(async ({data, message}) => {
                     this.updateServiceInList(data);
                     this.patchState({
@@ -140,16 +141,16 @@ export class ServicesComponentStore extends ComponentStore<IStatesServicesState>
         );
     });
 
-    readonly loadUpdateService = this.effect((company$: Observable<any>) => {
-        return company$.pipe(
-            map(company => {
+    readonly loadUpdateService = this.effect((service$: Observable<any>) => {
+        return service$.pipe(
+            map(service => {
                 this.patchState({createUpdateServiceLoading: true});
                 return {
-                    ...company,
-                    service_activa: company.service_activa ? PARAM.ACTIVO : PARAM.INACTIVO
+                    ...service,
+                    active: service.active ? PARAM.ACTIVO : PARAM.INACTIVO
                 }
             }),
-            switchMap(company => this._statesFixedassetRemoteRequest.requestUpdateService(company).pipe(
+            switchMap(service => this._statesFixedassetRemoteRequest.requestUpdateService(service).pipe(
                 tap(async ({data, message}) => {
                     this.updateServiceInList(data);
                     this.patchState({
@@ -208,8 +209,9 @@ export class ServicesComponentStore extends ComponentStore<IStatesServicesState>
 
         const serviceSelected = {
             service_id: null,
-            service_nombre: null,
-            service_activa: true
+            name: null,
+            description: null,
+            active: true
         };
 
         servicesData.unshift(serviceSelected);
@@ -221,12 +223,12 @@ export class ServicesComponentStore extends ComponentStore<IStatesServicesState>
         return of(true);
     };
 
-    readonly updateServiceInList = this.updater((state, companyToUpdate: any) => {
+    readonly updateServiceInList = this.updater((state, serviceToUpdate: any) => {
         const servicesData = [...state.servicesData];
-        const companyIndex = servicesData.findIndex(company => !company.service_id || company.service_id == companyToUpdate.service_id);
+        const serviceIndex = servicesData.findIndex(service => !service.service_id || service.service_id == serviceToUpdate.service_id);
 
-        if (companyIndex >= 0) {
-            servicesData[companyIndex] = companyToUpdate;
+        if (serviceIndex >= 0) {
+            servicesData[serviceIndex] = serviceToUpdate;
         }
 
         return {
@@ -262,7 +264,7 @@ export class ServicesComponentStore extends ComponentStore<IStatesServicesState>
 
     readonly discardFromListServiceToCreate = this.updater((state) => {
         const servicesDataStored: any[] = [...state.servicesData];
-        const servicesData = servicesDataStored.filter(company => company.service_id > 0);
+        const servicesData = servicesDataStored.filter(service => service.service_id > 0);
         return {
             ...state,
             servicesData,
