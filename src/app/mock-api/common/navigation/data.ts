@@ -22,6 +22,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon: 'heroicons_outline:clipboard-document-check',
                 link: '/tablas/servicios',
             },
+            {
+                id: 'tablas.pets',
+                title: 'Mascotas',
+                type: 'basic',
+                icon: 'heroicons_outline:clipboard-document-check',
+                link: '/tablas/mascotas',
+            },
         ],
     },
 ];
