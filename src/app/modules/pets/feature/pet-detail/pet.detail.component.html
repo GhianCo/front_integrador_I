@@ -22,16 +22,22 @@
         <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
             <div class="w-full max-w-3xl">
                 <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
-                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.description">
+                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.petName">
                         <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
-                        <div class="ml-6 leading-6"><span class="font-bold">Descripción:</span>
-                            {{ vm.petSelected?.description }}
+                        <div class="ml-6 leading-6"><span class="font-bold">Nombre:</span>
+                            {{ vm.petSelected?.petName }}
                         </div>
                     </div>
-                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.price">
+                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.customerFullname">
                         <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
-                        <div class="ml-6 leading-6"><span class="font-bold">Precio:</span>
-                            {{ vm.petSelected?.price }}
+                        <div class="ml-6 leading-6"><span class="font-bold">Dueño:</span>
+                            {{ vm.petSelected?.customerFullname }}
+                        </div>
+                    </div>
+                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.especie">
+                        <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                        <div class="ml-6 leading-6"><span class="font-bold">Especie:</span>
+                            {{ vm.petSelected?.especie }}
                         </div>
                     </div>
                 </div>
@@ -57,12 +63,24 @@
                         <input matInput formControlName="name" placeholder="Nombre" [spellcheck]="false">
                     </mat-form-field>
                     <mat-form-field class="mat-no-subscript w-full">
-                        <mat-label>Descripción</mat-label>
-                        <input matInput formControlName="description" placeholder="Descripción" [spellcheck]="false">
+                        <mat-label>Especie</mat-label>
+                        <input matInput formControlName="especie" placeholder="Especie" [spellcheck]="false">
                     </mat-form-field>
                     <mat-form-field class="mat-no-subscript w-full">
-                        <mat-label>Precio</mat-label>
-                        <input matInput formControlName="price" placeholder="Precio" type="number">
+                        <mat-label>Raza</mat-label>
+                        <input matInput formControlName="breed" placeholder="Raza">
+                    </mat-form-field>
+                    <mat-form-field class="mat-no-subscript w-full">
+                        <mat-label>Cumpleaños</mat-label>
+                        <input matInput formControlName="birthdate" placeholder="Cumpleaños">
+                    </mat-form-field>
+                    <mat-form-field class="mat-no-subscript w-full">
+                        <mat-label>Sexo</mat-label>
+                        <mat-select placeholder="Selecciona el sexo" formControlName="gender" [spellcheck]="false">
+                            <mat-option *ngFor="let sexo of sexos" [value]="sexo.id">
+                                {{ sexo.value }}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                     <div *ngIf="vm.petSelected?.pet_id > 0">
                         <div class="flex flex-col">

@@ -13,7 +13,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {PetsListComponent} from '../pets-list/pets.list.component';
 import {PetsComponentStore} from "../../data-access/pets.component.store";
-import {AsyncPipe, NgIf} from "@angular/common";
+import {AsyncPipe, CommonModule} from "@angular/common";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
@@ -22,6 +22,7 @@ import {RouterLink} from "@angular/router";
 import {MatInput} from "@angular/material/input";
 import {FlashMessageComponent} from "@shared/ui/flash-message/flash.message.component";
 import {MatIcon} from "@angular/material/icon";
+import {MatOption, MatSelect} from "@angular/material/select";
 
 @Component({
     standalone: true,
@@ -40,8 +41,10 @@ import {MatIcon} from "@angular/material/icon";
         RouterLink,
         MatInput,
         FlashMessageComponent,
-        NgIf,
+        CommonModule,
         MatIcon,
+        MatSelect,
+        MatOption,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,6 +60,17 @@ export class PetDetailComponent implements OnInit, OnDestroy {
     createUpdatePetFlashMessage$ = this._petsComponentStore.createUpdatePetFlashMessage$;
     createUpdatePetError$ = this._petsComponentStore.createUpdatePetError$;
 
+    public sexos: any = [
+        {
+            id: 'M',
+            value: 'Macho'
+        },
+        {
+            id: 'H',
+            value: 'Hembra'
+        }
+    ]
+
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _petListComponent: PetsListComponent,
@@ -70,8 +84,10 @@ export class PetDetailComponent implements OnInit, OnDestroy {
         this.petForm = this._formBuilder.group({
             pet_id: [''],
             name: ['', [Validators.required]],
-            description: ['', [Validators.required]],
-            price: ['', [Validators.required]],
+            especie: ['', [Validators.required]],
+            breed: ['', [Validators.required]],
+            birthdate: ['', [Validators.required]],
+            gender: ['M', [Validators.required]],
             active: [true]
         });
         this.petSelected$.pipe(takeUntil(this._unsubscribeAll))

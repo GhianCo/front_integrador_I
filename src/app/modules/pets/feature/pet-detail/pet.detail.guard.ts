@@ -25,7 +25,7 @@ export class CanDeactivatePetsDetail implements CanDeactivate<PetDetailComponent
             nextRoute = nextRoute.firstChild;
         }
 
-        if ( !nextState.url.includes('/servicios') )
+        if ( !nextState.url.includes('/mascotas') )
         {
             return true;
         }

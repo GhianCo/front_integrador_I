@@ -21,16 +21,16 @@
                 <div
                         class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
                     <div>
-                        <div class="text-4xl font-extrabold tracking-tight leading-none">Servicios</div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Mascotas</div>
                         <div class="ml-0.5 font-medium text-secondary">
                             <ng-container *ngIf="vm.petsPagination?.totalRows > 0">
                                 {{ vm.petsPagination?.totalRows }}
                             </ng-container>
                             {{
                                 vm.petsPagination?.totalRows | i18nPlural: {
-                                    '=0': 'Sin servicios',
-                                    '=1': 'servicio',
-                                    'other': 'servicios'
+                                    '=0': 'Sin mascotas',
+                                    '=1': 'mascota',
+                                    'other': 'mascotas'
                                 }
                             }}
                         </div>
@@ -42,7 +42,7 @@
                                           class="icon-size-4 mr-2"></mat-icon>
                                 <input matInput #searchText [autocomplete]="'off'"
                                        (keyup)="searchPetsByQuery(searchText.value)"
-                                       [placeholder]="'Busqueda de servicios'">
+                                       [placeholder]="'Busqueda de mascotas'">
                             </mat-form-field>
                         </div>
                         <button class="ml-4" mat-flat-button [color]="'accent'" (click)="loadAllPets()">
@@ -67,10 +67,22 @@
                                                         class="py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5">
                                                 <tr>
                                                     <th class="font-bold px-6 py-4 text-left">
-                                                        Descripción
+                                                        Nombre
                                                     </th>
                                                     <th class="font-bold px-6 py-4 text-left">
-                                                        Precio
+                                                        Dueño
+                                                    </th>
+                                                    <th class="font-bold px-6 py-4 text-left">
+                                                        Especie
+                                                    </th>
+                                                    <th class="font-bold px-6 py-4 text-left">
+                                                        Raza
+                                                    </th>
+                                                    <th class="font-bold px-6 py-4 text-left">
+                                                        Cumpleaños
+                                                    </th>
+                                                    <th class="font-bold px-6 py-4 text-left">
+                                                        Sexo
                                                     </th>
                                                     <th class="font-bold px-6 py-4 text-left">
                                                         Activo
@@ -86,10 +98,22 @@
                                                     <tr class="border-b"
                                                         [ngClass]="{'bg-gray-800': vm.petSelected?.pet_id == pet.pet_id}">
                                                         <td class="px-6 py-4  font-medium">
-                                                            {{ pet.name }}
+                                                            {{ pet.petName }}
                                                         </td>
                                                         <td class="px-6 py-4  font-medium">
-                                                            {{ pet.price }}
+                                                            {{ pet.customerFullname }}
+                                                        </td>
+                                                        <td class="px-6 py-4  font-medium">
+                                                            {{ pet.especie }}
+                                                        </td>
+                                                        <td class="px-6 py-4  font-medium">
+                                                            {{ pet.breed }}
+                                                        </td>
+                                                        <td class="px-6 py-4  font-medium">
+                                                            {{ pet.birthdateFormat }}
+                                                        </td>
+                                                        <td class="px-6 py-4  font-medium">
+                                                            {{ pet.gender }}
                                                         </td>
                                                         <td class="px-6 py-4">
                                                             <mat-icon [svgIcon]="'heroicons_outline:check'" *ngIf="pet.active" class="text-green-400 icon-size-4"></mat-icon>
