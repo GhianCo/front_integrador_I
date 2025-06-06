@@ -61,6 +61,7 @@ export const appRoutes: Route[] = [
             {path: 'tablas', children: [
                     {path: 'servicios', loadChildren: () => import('app/modules/services/feature/services-shell/services.routes')},
                     {path: 'mascotas', loadChildren: () => import('app/modules/pets/feature/pets-shell/pets.routes')},
+                    {path: 'clientes', loadChildren: () => import('app/modules/customers/feature/customers-shell/customers.routes')},
                 ]},
 
         ]
