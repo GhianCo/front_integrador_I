@@ -79,7 +79,7 @@
                                                         Raza
                                                     </th>
                                                     <th class="font-bold px-6 py-4 text-left">
-                                                        Cumpleaños
+                                                        Fecha nacimiento
                                                     </th>
                                                     <th class="font-bold px-6 py-4 text-left">
                                                         Sexo
@@ -98,10 +98,10 @@
                                                     <tr class="border-b"
                                                         [ngClass]="{'bg-gray-800': vm.petSelected?.pet_id == pet.pet_id}">
                                                         <td class="px-6 py-4  font-medium">
-                                                            {{ pet.petName }}
+                                                            {{ pet.name }}
                                                         </td>
                                                         <td class="px-6 py-4  font-medium">
-                                                            {{ pet.customerFullname }}
+                                                            {{ pet.customer_fullname }}
                                                         </td>
                                                         <td class="px-6 py-4  font-medium">
                                                             {{ pet.especie }}

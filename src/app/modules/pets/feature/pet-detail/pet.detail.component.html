@@ -1,7 +1,8 @@
 <div class="flex flex-col w-full" *ngIf="{
     petSelected: petSelected$ | async,
     createUpdatePetFlashMessage: createUpdatePetFlashMessage$ | async,
-    createUpdatePetError: createUpdatePetError$ | async
+    createUpdatePetError: createUpdatePetError$ | async,
+    customersToPetData: customersToPetData$ | async
 } as vm">
     <ng-container *ngIf="!editMode">
         <div class="relative w-full h-22 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
@@ -22,22 +23,22 @@
         <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
             <div class="w-full max-w-3xl">
                 <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
-                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.petName">
+                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.name">
                         <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
                         <div class="ml-6 leading-6"><span class="font-bold">Nombre:</span>
-                            {{ vm.petSelected?.petName }}
+                            {{ vm.petSelected?.name }}
                         </div>
                     </div>
-                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.customerFullname">
+                    <div class="flex sm:items-center" *ngIf="vm.petSelected?.customer_fullname">
                         <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
                         <div class="ml-6 leading-6"><span class="font-bold">Dueño:</span>
-                            {{ vm.petSelected?.customerFullname }}
+                            {{ vm.petSelected?.customer_fullname }}
                         </div>
                     </div>
                     <div class="flex sm:items-center" *ngIf="vm.petSelected?.especie">
                         <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
-                        <div class="ml-6 leading-6"><span class="font-bold">Especie:</span>
-                            {{ vm.petSelected?.especie }}
+                        <div class="ml-6 leading-6"><span class="font-bold">Especie y Raza:</span>
+                            {{ vm.petSelected?.especie }} - {{ vm.petSelected?.breed }}
                         </div>
                     </div>
                 </div>
@@ -58,30 +59,56 @@
         <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
             <div class="w-full max-w-3xl">
                 <form [formGroup]="petForm" class="pt-8">
-                    <mat-form-field class="mat-no-subscript w-full">
+                    <div class="w-full">
+                        <mat-label>Dueño</mat-label>
+                        <app-select-searching emptyValueText="Asignar dueño"
+                                              classPanelListResults="w-max"
+                                              [hasError]="petForm.get('customer_id').hasError('required') && formSubmitted"
+                                              [id]="petForm.get('customer_id').value"
+                                              [valueText]="petForm.get('customer_fullname').value"
+                                              placeholderInputSearch="Buscar dueño"
+                                              (searchByQueryEvent)="searchCustomerByQueryToPet($event)"
+                                              (selectResultEvent)="assignCustomerToPet($event)"
+                                              keyId="customer_id"
+                                              keyValue="customer_fullname"
+                                              [resultsFound]="vm.customersToPetData">
+                        </app-select-searching>
+                    </div>
+                    <mat-form-field class="mat-no-subscript w-full mt-4">
                         <mat-label>Nombre</mat-label>
                         <input matInput formControlName="name" placeholder="Nombre" [spellcheck]="false">
                     </mat-form-field>
-                    <mat-form-field class="mat-no-subscript w-full">
-                        <mat-label>Especie</mat-label>
-                        <input matInput formControlName="especie" placeholder="Especie" [spellcheck]="false">
-                    </mat-form-field>
-                    <mat-form-field class="mat-no-subscript w-full">
-                        <mat-label>Raza</mat-label>
-                        <input matInput formControlName="breed" placeholder="Raza">
-                    </mat-form-field>
-                    <mat-form-field class="mat-no-subscript w-full">
-                        <mat-label>Cumpleaños</mat-label>
-                        <input matInput formControlName="birthdate" placeholder="Cumpleaños">
-                    </mat-form-field>
-                    <mat-form-field class="mat-no-subscript w-full">
-                        <mat-label>Sexo</mat-label>
-                        <mat-select placeholder="Selecciona el sexo" formControlName="gender" [spellcheck]="false">
-                            <mat-option *ngFor="let sexo of sexos" [value]="sexo.id">
-                                {{ sexo.value }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <div class="flex space-x-4">
+                        <mat-form-field class="mat-no-subscript w-full">
+                            <mat-label>Especie</mat-label>
+                            <mat-select placeholder="Selecciona la especie" formControlName="especie"
+                                        [spellcheck]="false">
+                                <mat-option *ngFor="let especie of especies" [value]="especie.id">
+                                    {{ especie.value }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="mat-no-subscript w-full">
+                            <mat-label>Raza</mat-label>
+                            <input matInput formControlName="breed" placeholder="Raza">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex space-x-4">
+                        <mat-form-field class="mat-no-subscript w-full">
+                            <mat-label>Sexo</mat-label>
+                            <mat-select placeholder="Selecciona el sexo" formControlName="gender" [spellcheck]="false">
+                                <mat-option *ngFor="let sexo of sexos" [value]="sexo.id">
+                                    {{ sexo.value }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="w-full" floatLabel="always">
+                            <mat-label>Fecha de nacimiento</mat-label>
+                            <input matInput [matDatepicker]="datepicker" formControlName="birthdate">
+                            <mat-datepicker #datepicker/>
+                            <mat-datepicker-toggle [for]="datepicker" matSuffix/>
+                        </mat-form-field>
+                    </div>
                     <div *ngIf="vm.petSelected?.pet_id > 0">
                         <div class="flex flex-col">
                             <span class="font-semibold mb-2">Estado</span>

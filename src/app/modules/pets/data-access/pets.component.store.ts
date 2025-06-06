@@ -5,6 +5,7 @@ import {PARAM} from "@shared/constants";
 import {Observable, of, throwError} from "rxjs";
 import {catchError, map, switchMap, take, tap} from "rxjs/operators";
 import {PetsReq} from "./pets.req";
+import {DateService} from "@shared/services/date.service";
 
 export interface IStatesPetsState {
     petsLoading: boolean,
@@ -19,6 +20,10 @@ export interface IStatesPetsState {
     createUpdatePetLoading: boolean,
     createUpdatePetFlashMessage: string,
     createUpdatePetError: any,
+
+    customersToPetLoading: boolean,
+    customersToPetData: any[],
+    customersToPetError: any,
 }
 
 const initialStatesPetsState: IStatesPetsState = {
@@ -38,6 +43,10 @@ const initialStatesPetsState: IStatesPetsState = {
     createUpdatePetLoading: false,
     createUpdatePetFlashMessage: null,
     createUpdatePetError: null,
+
+    customersToPetLoading: false,
+    customersToPetData: [],
+    customersToPetError: null,
 };
 
 @Injectable({ providedIn: 'root'})
@@ -56,8 +65,13 @@ export class PetsComponentStore extends ComponentStore<IStatesPetsState> {
     readonly createUpdatePetFlashMessage$: Observable<string> = this.select(({createUpdatePetFlashMessage}) => createUpdatePetFlashMessage);
     readonly createUpdatePetError$: Observable<any> = this.select(({createUpdatePetError}) => createUpdatePetError);
 
+    readonly customersToPetLoading$: Observable<boolean> = this.select(({customersToPetLoading}) => customersToPetLoading);
+    readonly customersToPetData$: Observable<any[]> = this.select(({customersToPetData}) => customersToPetData);
+    readonly customersToPetError$: Observable<string> = this.select(({customersToPetError}) => customersToPetError);
+
+
     constructor(
-        private _statesFixedassetRemoteRequest: PetsReq,
+        private _petsRemoteRequest: PetsReq,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
     ) {
@@ -84,7 +98,7 @@ export class PetsComponentStore extends ComponentStore<IStatesPetsState> {
             tap(_ => {
                 this.patchState({petsLoading: true});
             }),
-            switchMap(criteria => this._statesFixedassetRemoteRequest.requestSearchPetsByCriteria(criteria).pipe(
+            switchMap(criteria => this._petsRemoteRequest.requestSearchPetsByCriteria(criteria).pipe(
                 tap(async ({data, pagination}) => {
                     this.patchState({
                         petsLoading: false,
@@ -109,10 +123,11 @@ export class PetsComponentStore extends ComponentStore<IStatesPetsState> {
                 delete pet.pet_id;
                 return {
                     ...pet,
+                    birthdate: DateService.formatDateForMySQL(pet.birthdate),
                     active: pet.active ? PARAM.ACTIVO : PARAM.INACTIVO
                 }
             }),
-            switchMap(pet => this._statesFixedassetRemoteRequest.requestCreatePet(pet).pipe(
+            switchMap(pet => this._petsRemoteRequest.requestCreatePet(pet).pipe(
                 tap(async ({data, message}) => {
                     this.updatePetInList(data);
                     this.patchState({
@@ -121,9 +136,6 @@ export class PetsComponentStore extends ComponentStore<IStatesPetsState> {
                         createUpdatePetFlashMessage: message,
                         createUpdatePetError: null
                     });
-
-                    this._router.navigate(['pets', data.pet_id], {relativeTo: this._activatedRoute});
-
                     setTimeout(_ => {
                         this.patchState({
                             createUpdatePetFlashMessage: null
@@ -147,10 +159,11 @@ export class PetsComponentStore extends ComponentStore<IStatesPetsState> {
                 this.patchState({createUpdatePetLoading: true});
                 return {
                     ...pet,
+                    birthdate: DateService.formatDateForMySQL(pet.birthdate),
                     active: pet.active ? PARAM.ACTIVO : PARAM.INACTIVO
                 }
             }),
-            switchMap(pet => this._statesFixedassetRemoteRequest.requestUpdatePet(pet).pipe(
+            switchMap(pet => this._petsRemoteRequest.requestUpdatePet(pet).pipe(
                 tap(async ({data, message}) => {
                     this.updatePetInList(data);
                     this.patchState({
@@ -229,6 +242,13 @@ export class PetsComponentStore extends ComponentStore<IStatesPetsState> {
 
         if (petIndex >= 0) {
             petsData[petIndex] = petToUpdate;
+        } else {
+            petsData.push(petToUpdate);
+        }
+
+        if(petToUpdate.active == PARAM.INACTIVO) {
+            petsData.splice(petIndex, 1);
+            this._router.navigate(['./tablas/mascotas'], { relativeTo: this._activatedRoute });
         }
 
         return {
@@ -276,6 +296,35 @@ export class PetsComponentStore extends ComponentStore<IStatesPetsState> {
         return {
             ...state,
             petSelected: null,
+        }
+    });
+
+    readonly loadCustomersBySearch = this.effect((querySearch$: Observable<string>) => {
+        return querySearch$.pipe(
+            tap(_ => {
+                this.patchState({customersToPetLoading: true});
+            }),
+            switchMap(querySearch => this._petsRemoteRequest.requestSearchCustomerToPetByQuery(querySearch).pipe(
+                tap(async ({data}) => {
+                    this.patchState({
+                        customersToPetData: data,
+                        customersToPetLoading: false,
+                    })
+                }),
+                catchError((error) => {
+                    return of(this.patchState({
+                        customersToPetLoading: false,
+                        customersToPetError: error
+                    }));
+                }),
+            )),
+        );
+    });
+
+    readonly clearCustomersToPetData = this.updater((state) => {
+        return {
+            ...state,
+            customersToPetData: []
         }
     });
 

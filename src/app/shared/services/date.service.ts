@@ -136,4 +136,27 @@ export class DateService {
   static getCurrentTimeUnix(): number {
     return getUnixTime(new Date());
   }
+
+  static formatDateForMySQL(inputDate) {
+    if (typeof inputDate === 'string') {
+      // Si ya está en formato YYYY-MM-DD, se asume válida
+      const yyyyMmDdRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (yyyyMmDdRegex.test(inputDate)) {
+        return inputDate;
+      }
+
+      // Intenta parsear la fecha
+      const parsed = new Date(inputDate);
+      if (!isNaN(parsed.getTime())) {
+        return parsed.toISOString().slice(0, 10); // YYYY-MM-DD
+      }
+    }
+
+    if (inputDate.isValid()) {
+      return inputDate.format('YYYY-MM-DD')
+    }
+
+    throw new Error('Fecha inválida. Debe ser string (YYYY-MM-DD o ISO) o un objeto Date válido.');
+
+  }
 }

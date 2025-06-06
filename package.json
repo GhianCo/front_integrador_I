@@ -23,6 +23,7 @@
         "@angular/material-luxon-adapter": "18.0.1",
         "@angular/platform-browser": "18.0.1",
         "@angular/platform-browser-dynamic": "18.0.1",
+        "@angular/material-moment-adapter": "^18.0.1",
         "@angular/router": "18.0.1",
         "@ngneat/transloco": "6.0.4",
         "apexcharts": "3.49.1",

@@ -9,13 +9,13 @@ import {
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {OverlayRef} from '@angular/cdk/overlay';
 import {MatDrawerToggleResult} from '@angular/material/sidenav';
-import {Subject} from 'rxjs';
+import {debounceTime, Subject, tap} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {PetsListComponent} from '../pets-list/pets.list.component';
 import {PetsComponentStore} from "../../data-access/pets.component.store";
 import {AsyncPipe, CommonModule} from "@angular/common";
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {MatTooltip} from "@angular/material/tooltip";
 import {RouterLink} from "@angular/router";
@@ -23,6 +23,24 @@ import {MatInput} from "@angular/material/input";
 import {FlashMessageComponent} from "@shared/ui/flash-message/flash.message.component";
 import {MatIcon} from "@angular/material/icon";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {
+    MatDatepickerModule,
+} from "@angular/material/datepicker";
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/core";
+import {MomentDateAdapter} from "@angular/material-moment-adapter";
+import {SelectSearchingComponent} from "@shared/ui/select-searching/select.searching.component";
+
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'LL'
+    },
+    display: {
+        dateInput: 'DD/MM/YYYY',
+        monthYearLabel: 'YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'YYYY'
+    }
+};
 
 @Component({
     standalone: true,
@@ -45,6 +63,13 @@ import {MatOption, MatSelect} from "@angular/material/select";
         MatIcon,
         MatSelect,
         MatOption,
+        MatFormFieldModule,
+        MatDatepickerModule,
+        SelectSearchingComponent
+    ],
+    providers: [
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -59,6 +84,34 @@ export class PetDetailComponent implements OnInit, OnDestroy {
     petSelected$ = this._petsComponentStore.petSelected$;
     createUpdatePetFlashMessage$ = this._petsComponentStore.createUpdatePetFlashMessage$;
     createUpdatePetError$ = this._petsComponentStore.createUpdatePetError$;
+
+    public customersToPetData$ = this._petsComponentStore.customersToPetData$;
+
+    private searchCustomerToAssignChanged: Subject<string> = new Subject<string>();
+    public formSubmitted = false;
+
+    public especies: any = [
+        {
+            id: 'Perro',
+            value: 'Perro'
+        },
+        {
+            id: 'Gato',
+            value: 'Gato'
+        },
+        {
+            id: 'Conejo',
+            value: 'Conejo'
+        },
+        {
+            id: 'Hámster',
+            value: 'Hámster'
+        },
+        {
+            id: 'Loro',
+            value: 'Loro'
+        }
+    ]
 
     public sexos: any = [
         {
@@ -83,11 +136,13 @@ export class PetDetailComponent implements OnInit, OnDestroy {
         this._petListComponent.matDrawer.open();
         this.petForm = this._formBuilder.group({
             pet_id: [''],
-            name: ['', [Validators.required]],
-            especie: ['', [Validators.required]],
-            breed: ['', [Validators.required]],
-            birthdate: ['', [Validators.required]],
-            gender: ['M', [Validators.required]],
+            customer_fullname: ['', Validators.required],
+            customer_id: ['', Validators.required],
+            name: ['', Validators.required],
+            especie: ['', Validators.required],
+            breed: ['', Validators.required],
+            birthdate: ['', Validators.required],
+            gender: ['M', Validators.required],
             active: [true]
         });
         this.petSelected$.pipe(takeUntil(this._unsubscribeAll))
@@ -102,6 +157,13 @@ export class PetDetailComponent implements OnInit, OnDestroy {
                     this._changeDetectorRef.markForCheck();
                 }
             );
+        this.searchCustomerToAssignChanged.pipe(
+            takeUntil(this._unsubscribeAll),
+            debounceTime(800),
+            tap(searchValue => {
+                this._petsComponentStore.loadCustomersBySearch(searchValue);
+            })
+        ).subscribe();
     }
 
     closeDrawer(): Promise<MatDrawerToggleResult> {
@@ -119,6 +181,7 @@ export class PetDetailComponent implements OnInit, OnDestroy {
     }
 
     createUpdateSelectedCompany(): void {
+        this.formSubmitted = true;
         if (this.petForm.invalid) {
             return;
         }
@@ -128,6 +191,18 @@ export class PetDetailComponent implements OnInit, OnDestroy {
         } else {
             this._petsComponentStore.loadCreatePet(pet);
         }
+    }
+
+    public searchCustomerByQueryToPet(searchValue) {
+        this.searchCustomerToAssignChanged.next(searchValue);
+    }
+
+    public assignCustomerToPet(customer) {
+        this.petForm.patchValue({
+            customer_id: customer.customer_id,
+            customer_fullname: customer.customer_fullname
+        });
+        this._changeDetectorRef.markForCheck();
     }
 
     trackByFn(index: number, item: any): any {
