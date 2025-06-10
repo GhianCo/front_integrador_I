@@ -84,6 +84,18 @@ export class AuthService {
         if (this._authenticated) {
             return of(true);
         }
+        if (!this._authenticated && this.accessToken) {
+            this._authenticated = true;
+            const dataToken = this._jwtHelperService.decodeToken(this.accessToken);
+
+            // Store the user on the user service
+            this._userService.user = {
+                id: dataToken.sub,
+                name: dataToken.name,
+                email: dataToken.email
+            };
+            return of(true);
+        }
 
         if (!this.accessToken) {
             return of(false);
