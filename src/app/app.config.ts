@@ -20,6 +20,7 @@ import { TranslocoHttpLoader } from './core/transloco/transloco.http-loader';
 import {provideInterceptor} from "@shared/interceptors/interceptors.provider";
 import {provideToastr} from "ngx-toastr";
 import {HttpService, httpServiceCreator} from "@shared/services/http.service";
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -86,6 +87,8 @@ export const appConfig: ApplicationConfig = {
             },
             multi: true,
         },
+        JwtHelperService,
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
         //Http Interceptors
         provideInterceptor(),
         // Fuse

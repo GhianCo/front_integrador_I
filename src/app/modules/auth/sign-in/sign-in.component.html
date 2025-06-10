@@ -34,8 +34,8 @@
                 <!-- Email field -->
                 <mat-form-field class="w-full">
                     <mat-label>Usuario</mat-label>
-                    <input id="email" matInput [formControlName]="'email'"/>
-                    @if (signInForm.get('email').hasError('required')) {
+                    <input id="user" matInput [formControlName]="'user'"/>
+                    @if (signInForm.get('user').hasError('required')) {
                         <mat-error> El usuario es requerido</mat-error>
                     }
                 </mat-form-field>
@@ -44,29 +44,29 @@
                 <mat-form-field class="w-full">
                     <mat-label>Contraseña</mat-label>
                     <input
-                            id="password"
+                            id="pass"
                             matInput
-                            type="password"
-                            [formControlName]="'password'"
-                            #passwordField
+                            type="pass"
+                            [formControlName]="'pass'"
+                            #passField
                     />
                     <button
                             mat-icon-button
                             type="button"
                             (click)="
-                            passwordField.type === 'password'
-                                ? (passwordField.type = 'text')
-                                : (passwordField.type = 'password')
+                            passField.type === 'pass'
+                                ? (passField.type = 'text')
+                                : (passField.type = 'pass')
                         "
                             matSuffix
                     >
-                        @if (passwordField.type === 'password') {
+                        @if (passField.type === 'pass') {
                             <mat-icon
                                     class="icon-size-5"
                                     [svgIcon]="'heroicons_solid:eye'"
                             ></mat-icon>
                         }
-                        @if (passwordField.type === 'text') {
+                        @if (passField.type === 'text') {
                             <mat-icon
                                     class="icon-size-5"
                                     [svgIcon]="'heroicons_solid:eye-slash'"
