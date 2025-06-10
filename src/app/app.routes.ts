@@ -58,12 +58,16 @@ export const appRoutes: Route[] = [
         },
         children: [
             {path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes')},
+            {path: 'gestion', children: [
+                    {path: 'citas', loadChildren: () => import('app/modules/appointments/feature/appointments-shell/appointments.routes')},
+                ]
+            },
             {path: 'tablas', children: [
                     {path: 'servicios', loadChildren: () => import('app/modules/services/feature/services-shell/services.routes')},
                     {path: 'mascotas', loadChildren: () => import('app/modules/pets/feature/pets-shell/pets.routes')},
                     {path: 'clientes', loadChildren: () => import('app/modules/customers/feature/customers-shell/customers.routes')},
-                ]},
-
+                ]
+            },
         ]
     }
 ];

@@ -1,0 +1,144 @@
+<div class="flex flex-col w-full" *ngIf="{
+    appointmentSelected: appointmentSelected$ | async,
+    createUpdateAppointmentFlashMessage: createUpdateAppointmentFlashMessage$ | async,
+    createUpdateAppointmentError: createUpdateAppointmentError$ | async,
+    customersToAppointmentData: customersToAppointmentData$ | async
+} as vm">
+    <ng-container *ngIf="!editMode">
+        <div class="relative w-full h-22 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+            <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
+                <div class="text-4xl font-bold truncate">{{ vm.appointmentSelected?.name }}</div>
+                <div class="flex items-center ml-auto mb-1">
+                    <button mat-stroked-button (click)="toggleEditMode(true)">
+                        <mat-icon [svgIcon]="'heroicons_outline:pencil'" class="icon-size-4"></mat-icon>
+                        <span class="ml-2">Editar</span>
+                    </button>
+                </div>
+                <button mat-icon-button [matTooltip]="'Cerrar'" [routerLink]="['../']">
+                    <mat-icon [svgIcon]="'heroicons_outline:x-mark'" class="text-white"></mat-icon>
+                </button>
+            </div>
+        </div>
+        <!-- Company -->
+        <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
+            <div class="w-full max-w-3xl">
+                <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
+                    <div class="flex sm:items-center" *ngIf="vm.appointmentSelected?.name">
+                        <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                        <div class="ml-6 leading-6"><span class="font-bold">Nombre:</span>
+                            {{ vm.appointmentSelected?.name }}
+                        </div>
+                    </div>
+                    <div class="flex sm:items-center" *ngIf="vm.appointmentSelected?.customer_fullname">
+                        <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                        <div class="ml-6 leading-6"><span class="font-bold">Dueño:</span>
+                            {{ vm.appointmentSelected?.customer_fullname }}
+                        </div>
+                    </div>
+                    <div class="flex sm:items-center" *ngIf="vm.appointmentSelected?.especie">
+                        <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                        <div class="ml-6 leading-6"><span class="font-bold">Especie y Raza:</span>
+                            {{ vm.appointmentSelected?.especie }} - {{ vm.appointmentSelected?.breed }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="editMode">
+        <div class="relative w-full h-22 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
+            <div class="flex items-center justify-between w-full max-w-3xl mx-auto pt-6">
+                <div class="text-4xl font-bold truncate">{{ vm.appointmentSelected?.name }}</div>
+                <button mat-icon-button [matTooltip]="'Cerrar'" [routerLink]="['../']">
+                    <mat-icon [svgIcon]="'heroicons_outline:x-mark'" class="text-white"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12">
+            <div class="w-full max-w-3xl">
+                <form [formGroup]="appointmentForm" class="pt-8">
+                    <div class="w-full">
+                        <mat-label>Dueño</mat-label>
+                        <app-select-searching emptyValueText="Asignar dueño"
+                                              classPanelListResults="w-max"
+                                              [hasError]="appointmentForm.get('customer_id').hasError('required') && formSubmitted"
+                                              [id]="appointmentForm.get('customer_id').value"
+                                              [valueText]="appointmentForm.get('customer_fullname').value"
+                                              placeholderInputSearch="Buscar dueño"
+                                              (searchByQueryEvent)="searchCustomerByQueryToAppointment($event)"
+                                              (selectResultEvent)="assignCustomerToAppointment($event)"
+                                              keyId="customer_id"
+                                              keyValue="customer_fullname"
+                                              [resultsFound]="vm.customersToAppointmentData">
+                        </app-select-searching>
+                    </div>
+                    <mat-form-field class="mat-no-subscript w-full mt-4">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput formControlName="name" placeholder="Nombre" [spellcheck]="false">
+                    </mat-form-field>
+                    <div class="flex space-x-4">
+                        <mat-form-field class="mat-no-subscript w-full">
+                            <mat-label>Especie</mat-label>
+                            <mat-select placeholder="Selecciona la especie" formControlName="especie"
+                                        [spellcheck]="false">
+                                <mat-option *ngFor="let especie of especies" [value]="especie.id">
+                                    {{ especie.value }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="mat-no-subscript w-full">
+                            <mat-label>Raza</mat-label>
+                            <input matInput formControlName="breed" placeholder="Raza">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex space-x-4">
+                        <mat-form-field class="mat-no-subscript w-full">
+                            <mat-label>Sexo</mat-label>
+                            <mat-select placeholder="Selecciona el sexo" formControlName="gender" [spellcheck]="false">
+                                <mat-option *ngFor="let sexo of sexos" [value]="sexo.id">
+                                    {{ sexo.value }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="w-full" floatLabel="always">
+                            <mat-label>Fecha de nacimiento</mat-label>
+                            <input matInput [matDatepicker]="datepicker" formControlName="birthdate">
+                            <mat-datepicker #datepicker/>
+                            <mat-datepicker-toggle [for]="datepicker" matSuffix/>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="vm.appointmentSelected?.appointment_id > 0">
+                        <div class="flex flex-col">
+                            <span class="font-semibold mb-2">Estado</span>
+                            <mat-slide-toggle formControlName="active"
+                                              [color]="'primary'">
+                                {{
+                                    appointmentForm.get('active').value ?
+                                        'Activa' :
+                                        'Inactiva'
+                                }}
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <div class="ml-auto" *ngIf="appointmentForm.get('pet_id').value <= 0"></div>
+                        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="toggleEditMode(false)"
+                                *ngIf="petForm.get('pet_id').value > 0">
+                            Cancelar
+                        </button>
+                        <app-flash-message *ngIf="vm.createUpdateAppointmentFlashMessage"
+                                           [hasError]="vm.createUpdateAppointmentError"
+                                           [message]="vm.createUpdateAppointmentFlashMessage"></app-flash-message>
+                        <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="petForm.invalid"
+                                [matTooltip]="'Guardar'" (click)="createUpdateSelectedCompany()">
+                            Guardar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </ng-container>
+</div>

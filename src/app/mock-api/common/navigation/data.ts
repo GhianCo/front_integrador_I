@@ -10,6 +10,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link : '/example'
     },
     {
+        id: 'gestion',
+        title: 'Gestión',
+        type: 'group',
+        icon: 'heroicons_outline:home',
+        children: [
+            {
+                id: 'gestion.citas',
+                title: 'Citas',
+                type: 'basic',
+                icon: 'heroicons_outline:clipboard-document-check',
+                link: '/gestion/citas',
+            }
+        ],
+    },
+    {
         id: 'tablas',
         title: 'Tablas',
         type: 'group',
